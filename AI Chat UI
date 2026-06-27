@@ -1,0 +1,120 @@
+//AI CHAT BUBBLE
+.ai-chat-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; }
+[data-lang="fa"] .ai-chat-container { right: auto; left: 24px; }
+
+.ai-chat-bubble {
+  width: 58px; height: 58px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand), #a855f7);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 6px 24px rgba(124,92,252,.45);
+  transition: transform .25s, box-shadow .25s;
+  position: relative;
+}
+.ai-chat-bubble:hover { transform: scale(1.08); box-shadow: 0 10px 32px rgba(124,92,252,.55); }
+.ai-chat-bubble svg { width: 26px; height: 26px; fill: white; }
+.ai-pulse {
+  position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px solid rgba(124,92,252,.4);
+  animation: aiPulse 2.5s infinite;
+}
+@keyframes aiPulse { 0%{transform:scale(1);opacity:.7} 100%{transform:scale(1.5);opacity:0} }
+
+.ai-chat-window {
+  position: absolute; bottom: 70px; right: 0;
+  width: 360px; max-height: 520px;
+  background: white; border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg); border: 1px solid var(--line);
+  display: none; flex-direction: column; overflow: hidden;
+  transform-origin: bottom right;
+}
+[data-lang="fa"] .ai-chat-window { right: auto; left: 0; transform-origin: bottom left; }
+.ai-chat-window.open { display: flex; }
+
+.ai-chat-header {
+  padding: 16px 20px; background: linear-gradient(135deg, var(--brand), #a855f7);
+  display: flex; align-items: center; gap: 12px;
+}
+.ai-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.ai-chat-header-info { flex: 1; }
+.ai-chat-header h4 { font-size: 15px; font-weight: 700; color: white; }
+.ai-chat-header span { font-size: 11px; color: rgba(255,255,255,.7); }
+.ai-chat-close { font-size: 18px; color: rgba(255,255,255,.7); }
+.ai-chat-close:hover { color: white; }
+
+.ai-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.ai-msg { max-width: 85%; }
+.ai-msg.bot { align-self: flex-start; }
+.ai-msg.user { align-self: flex-end; }
+.ai-msg-bubble {
+  padding: 10px 14px; border-radius: 16px; font-size: 13.5px; line-height: 1.55;
+}
+.ai-msg.bot .ai-msg-bubble { background: var(--surface); color: var(--ink); border-bottom-left-radius: 4px; }
+.ai-msg.user .ai-msg-bubble { background: var(--brand); color: white; border-bottom-right-radius: 4px; }
+.ai-typing { display: flex; gap: 4px; padding: 12px 14px; background: var(--surface); border-radius: 16px; border-bottom-left-radius: 4px; width: fit-content; }
+.ai-typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: typing .9s infinite; }
+.ai-typing span:nth-child(2) { animation-delay: .2s; }
+.ai-typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes typing { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-5px);opacity:1} }
+
+.ai-quick-btns { padding: 0 16px 12px; display: flex; flex-direction: column; gap: 6px; }
+.ai-quick-btn {
+  padding: 9px 14px; border-radius: 12px; text-align: left; font-size: 13px; font-weight: 500;
+  background: var(--brand-lt); color: var(--brand); transition: all .2s;
+}
+.ai-quick-btn:hover { background: var(--brand); color: white; }
+
+.ai-input-row { padding: 12px 14px; border-top: 1px solid var(--line); display: flex; gap: 8px; }
+.ai-input {
+  flex: 1; padding: 10px 14px; border: 1.5px solid var(--line); border-radius: 20px;
+  font-family: inherit; font-size: 13.5px; outline: none; transition: border-color .2s;
+}
+.ai-input:focus { border-color: var(--brand); }
+.ai-send {
+  width: 38px; height: 38px; border-radius: 50%; background: var(--brand);
+  display: flex; align-items: center; justify-content: center; color: white; font-size: 16px;
+  transition: background .2s;
+}
+.ai-send:hover { background: var(--brand-dk); }
+//AI CHAT BUBBLE
+<div class="float-socials">
+  <a href="https://wa.me/+989934344669" target="_blank" class="float-btn float-wa" title="WhatsApp">📞</a>
+  <a href="https://t.me/anitea" target="_blank" class="float-btn float-tg" title="Telegram">📨</a>
+</div>
+
+<div class="ai-chat-container">
+  <div class="ai-chat-window" id="aiWindow">
+    <div class="ai-chat-header">
+      <div class="ai-avatar">🤖</div>
+      <div class="ai-chat-header-info">
+        <h4 class="lang-en">Anitea's AI Assistant</h4>
+        <h4 class="lang-fa">دستیار هوش مصنوعی آنیتی</h4>
+        <span class="lang-en">Ask me which package you need</span>
+        <span class="lang-fa">بپرس کدوم پکیج مناسبته</span>
+      </div>
+      <button class="ai-chat-close" onclick="toggleAI()">✕</button>
+    </div>
+    <div class="ai-messages" id="aiMessages">
+      <div class="ai-msg bot">
+        <div class="ai-msg-bubble lang-en">Hi! 👋 I'm Anitea's AI assistant. Tell me about your project and I'll recommend the right package for you.</div>
+        <div class="ai-msg-bubble lang-fa">سلام! 👋 من دستیار هوش مصنوعی انیتام. درباره پروژه‌ات بگو تا بهترین پکیج رو پیشنهاد بدم.</div>
+      </div>
+    </div>
+    <div class="ai-quick-btns" id="aiQuickBtns">
+      <button class="ai-quick-btn lang-en" onclick="sendQuick('I need a simple portfolio site')">I need a portfolio site</button>
+      <button class="ai-quick-btn lang-fa" onclick="sendQuick('به یه سایت پورتفولیوی ساده نیاز دارم')">سایت پورتفولیو می‌خوام</button>
+      <button class="ai-quick-btn lang-en" onclick="sendQuick('I need a full business website')">I need a business website</button>
+      <button class="ai-quick-btn lang-fa" onclick="sendQuick('به سایت کسب‌وکار کامل نیاز دارم')">سایت کسب‌وکار می‌خوام</button>
+      <button class="ai-quick-btn lang-en" onclick="sendQuick('I want to sell products online')">I want to sell online</button>
+      <button class="ai-quick-btn lang-fa" onclick="sendQuick('می‌خوام آنلاین بفروشم')">می‌خوام بفروشم آنلاین</button>
+    </div>
+    <div class="ai-input-row">
+      <input type="text" class="ai-input lang-en" id="aiInput" placeholder="Type your question..." onkeypress="if(event.key==='Enter')sendAI()">
+      <input type="text" class="ai-input lang-fa" id="aiInputFa" placeholder="سوالت رو بنویس..." onkeypress="if(event.key==='Enter')sendAI()">
+      <button class="ai-send" onclick="sendAI()">↑</button>
+    </div>
+  </div>
+  <button class="ai-chat-bubble" onclick="toggleAI()" aria-label="AI Chat">
+    <div class="ai-pulse"></div>
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+  </button>
+</div>
