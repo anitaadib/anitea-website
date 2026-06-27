@@ -1,0 +1,17 @@
+// ── DARK MODE ──
+const toggleBtn = document.getElementById('themeToggle');
+
+if (localStorage.getItem('theme') === 'dark') {
+  document.documentElement.classList.add('dark-mode');
+  toggleBtn.innerHTML = '☀️';
+}
+
+toggleBtn.addEventListener('click', () => {
+  document.documentElement.classList.toggle('dark-mode');
+  if (document.documentElement.classList.contains('dark-mode')) {
+    localStorage.setItem('theme', 'dark');
+    toggleBtn.innerHTML = '☀️';
+  } else {
+    localStorage.setItem('theme', 'light');
+    toggleBtn.innerHTML = '🌙';
+  }
