@@ -1,0 +1,19 @@
+// ── LANGUAGE ──
+function setLang(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  document.documentElement.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
+  document.documentElement.setAttribute('lang', lang);
+  document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+  document.getElementById('btnFa').classList.toggle('active', lang === 'fa');
+  localStorage.setItem('lang', lang);
+  // Re-init payment tabs based on language
+  const isEn = lang === 'en';
+  document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+  if (isEn) {
+    document.querySelector('.payment-tab.lang-en').classList.add('active');
+    switchPayTab(null, 'paypal');
+  } else {
+    document.querySelector('.payment-tab.lang-fa').classList.add('active');
+    switchPayTab(null, 'zarinpal');
+  }
+}
